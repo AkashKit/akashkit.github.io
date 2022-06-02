@@ -1,0 +1,25 @@
+1. How whould you describe the concept of "state" ?
+>> A way for react to remeber saved value from within the component.
+
+2. When would you use propd instead of state ?
+>> Anytime you want to pass data into a component so that component can determine what will get displayed on the screen.
+
+3. What would you want use state instead of props.
+>>Anytime you want a component to maintain some values from within the component. 
+and those values when react re-renders the component.
+
+4. What does "Imutable" means? Are props imutable ? Is state imutable.
+>>Unchanging. Props are Imutable. State is mutable.
+
+5. You have 2 Options for what you can pass in state setter function. What are they.
+>>a. New value of state.
+  b.callback function.
+
+6. What would you want to pass the first option to the state setter function.
+>> whenever you don't need the previous value of state to determine what the new value of state should be.
+
+7. What would you want to pass the second option to the state setter function.
+>>Whenever you do need the previous value of state to determine what the new value of state should be.
+
+
+
