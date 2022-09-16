@@ -1,4 +1,4 @@
-* {
+/* * {
   box-sizing: border-box;
 }
 
@@ -78,7 +78,7 @@ main {
 p.dark {
   background: #000;
   color: #fff;
-} */
+} 
 
 .meme {
   position: relative;
@@ -124,4 +124,14 @@ p.dark {
 
 .hidden{
   display: none;
+} */
+
+body {
+  background-color: ivory;
+}
+#canvas {
+  border:1px solid red;
+}
+#theText {
+  width:10em;
 }

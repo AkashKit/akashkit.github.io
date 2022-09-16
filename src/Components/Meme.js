@@ -28,7 +28,6 @@ function Meme(){
     function RandomImage(event){
         
         var memeArray = allMeme;
-        // console.log(count);
         const randomNumber = Math.floor(Math.random() * memeArray.length);
         const old_url = meme['randomImage'];
         if (count == 1) {
@@ -41,7 +40,7 @@ function Meme(){
                 }
             });
         }else {
-            url = memeArray[count].url;
+            url = memeArray[randomNumber].url;
             setMeme(prevMeme => {
                 return {
                     ...prevMeme,
@@ -67,13 +66,71 @@ function Meme(){
 
     function download(){
         var canvas = document.getElementById("canvas");
-        var url = canvas.toDataURL("image/png");
+        var trimmedCanvas = trimCanvas(canvas);
+        var url = trimmedCanvas.toDataURL();
         var link = document.createElement('a');
         link.download = 'meme.png';
         link.href = url;
         link.click();
-        // debugger;
-      }
+    }
+
+    function trimCanvas(c) {
+        var ctx = c.getContext('2d'),
+            copy = document.createElement('canvas').getContext('2d'),
+            pixels = ctx.getImageData(0, 0, c.width, c.height),
+            l = pixels.data.length,
+            i,
+            bound = {
+                top: null,
+                left: null,
+                right: null,
+                bottom: null
+            },
+            x, y;
+        
+        // Iterate over every pixel to find the highest
+        // and where it ends on every axis ()
+        for (i = 0; i < l; i += 4) {
+            if (pixels.data[i + 3] !== 0) {
+                x = (i / 4) % c.width;
+                y = ~~((i / 4) / c.width);
+    
+                if (bound.top === null) {
+                    bound.top = y;
+                }
+    
+                if (bound.left === null) {
+                    bound.left = x;
+                } else if (x < bound.left) {
+                    bound.left = x;
+                }
+    
+                if (bound.right === null) {
+                    bound.right = x;
+                } else if (bound.right < x) {
+                    bound.right = x;
+                }
+    
+                if (bound.bottom === null) {
+                    bound.bottom = y;
+                } else if (bound.bottom < y) {
+                    bound.bottom = y;
+                }
+            }
+        }
+        
+        // Calculate the height and width of the content
+        var trimHeight = bound.bottom - bound.top,
+            trimWidth = bound.right - bound.left,
+            trimmed = ctx.getImageData(bound.left, bound.top, trimWidth, trimHeight);
+    
+        copy.canvas.width = trimWidth;
+        copy.canvas.height = trimHeight;
+        copy.putImageData(trimmed, 0, 0);
+    
+        // Return trimmed canvas
+        return copy.canvas;
+    }
 
     function handleChange(event){
         const target = event.target
@@ -86,8 +143,6 @@ function Meme(){
         }))  
     }
 
-    
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const tablerow = ctx => {
         // ctx.drawImage(img, 0, 0);
         ctx.font = "40px Courier";
@@ -111,7 +166,7 @@ function Meme(){
           RandomImage()
         }, 100);
         return () => clearTimeout(timer);
-      }, []);
+    }, []);
 
     return(
         <main>
